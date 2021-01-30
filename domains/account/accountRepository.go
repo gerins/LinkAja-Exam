@@ -4,6 +4,7 @@ import (
 	"Linkaja/utils/query"
 	"database/sql"
 	"errors"
+	"fmt"
 )
 
 // Data access layer
@@ -22,6 +23,8 @@ type AccountRepositoryInterface interface {
 
 func (r *AccountRepository) GetAccountInfo(accountNumber string) (*Account, error) {
 	row := r.db.QueryRow(query.ACCOUNT_INFO, accountNumber)
+
+	fmt.Println(`Repository Running`)
 
 	account := new(Account)
 	if err := row.Scan(&account.AccountNumber, &account.CustomerName, &account.Balance); err != nil {

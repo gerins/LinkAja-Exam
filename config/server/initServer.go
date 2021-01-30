@@ -2,6 +2,7 @@ package server
 
 import (
 	"Linkaja/config"
+	"Linkaja/custom"
 	"Linkaja/domains/account"
 	"database/sql"
 	"log"
@@ -16,6 +17,7 @@ type Server struct {
 	DB   *sql.DB
 }
 
+// Server constructor
 func InitServer(e *echo.Echo, db *sql.DB) *Server {
 	return &Server{Echo: e, DB: db}
 }
@@ -35,6 +37,9 @@ func (s *Server) ApplyMiddleware() *Server {
 	s.Echo.Use(middleware.CORS())
 	s.Echo.Use(middleware.Logger())
 	s.Echo.Use(middleware.Recover())
+
+	s.Echo.Use(custom.MiddlewarePrintIP)
+	s.Echo.Use(custom.MiddlewareBodyDump())
 
 	return s
 }

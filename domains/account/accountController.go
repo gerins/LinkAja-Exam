@@ -2,6 +2,7 @@ package account
 
 import (
 	"Linkaja/utils/message"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -19,6 +20,8 @@ func NewAccountController(useCase AccountUsecaseInterface) *AccountController {
 func (c *AccountController) HandleGetAccountInfo(e echo.Context) error {
 	accountNumber := e.Param("id")
 
+	fmt.Println(`Controller Running`)
+
 	result, err := c.AccountUsecase.GetAccountInfo(accountNumber)
 	if err != nil {
 		return e.JSON(http.StatusNotFound, message.Respone("Get Account Info Failed", http.StatusNotFound, err.Error()))
@@ -30,6 +33,7 @@ func (c *AccountController) HandleGetAccountInfo(e echo.Context) error {
 // Serializing user input then send to usecase layer
 func (c *AccountController) HandleProcessingTransaction(e echo.Context) error {
 	transDetail := &Transaction{SenderAccount: e.Param("senderId")}
+
 	if err := e.Bind(transDetail); err != nil {
 		return e.JSON(http.StatusBadRequest, message.Respone("Transaction Failed", http.StatusBadRequest, err.Error()))
 	}
